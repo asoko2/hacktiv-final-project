@@ -81,14 +81,28 @@ export async function addUser(prevState: State, formData: FormData) {
   });
   const responseJson = await response.json();
 
-  if (!response.ok) {
+  console.log("responseJson", responseJson);
+
+  console.log('resposne status', responseJson.status, responseJson.status == 409)
+  
+  if (
+    // responseJson.status == 400 ||
+    // responseJson.status == 500 ||
+    !response.ok
+    // responseJson.status == 409
+  ) {
     return {
-      errors: responseJson.errors,
+      errors: responseJson.status,
       message: responseJson.message,
     };
   }
 
-  redirect("/dashboard/users");
+  revalidatePath("/dashboard/users");
+
+  return {
+    errors: null,
+    message: "Berhasil menambahkan user",
+  };
 }
 
 export async function getUserById(id: string): Promise<User> {
@@ -150,7 +164,12 @@ export async function editUser(
     };
   }
 
-  redirect("/dashboard/users");
+  revalidatePath("/dashboard/users");
+
+  return {
+    errors: null,
+    message: "Berhasil memperbarui user",
+  };
 }
 
 export async function getAllUsers(): Promise<User[]> {

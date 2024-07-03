@@ -68,7 +68,11 @@ export default function NewSubmissionsPage() {
             <div className="grid grid-cols-1 gap-4">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="name">Deskripsi</Label>
-                <Input id="name" name="name" aria-describedby="name-error" />
+                <Input
+                  id="name"
+                  name="name"
+                  aria-describedby="name-error"
+                />
                 <div id="name-error" aria-live="polite" aria-atomic="true">
                   {Object.keys(state.errors).length > 0
                     ? state.errors.map(
@@ -222,11 +226,7 @@ export default function NewSubmissionsPage() {
                         onChange={(e) => handleChange(e, index)}
                         aria-describedby="qty-error"
                       />
-                      <div
-                        id="qty-error"
-                        aria-live="polite"
-                        aria-atomic="true"
-                      >
+                      <div id="qty-error" aria-live="polite" aria-atomic="true">
                         {Object.keys(state.errors).length > 0
                           ? state.errors.map(
                               (error: {

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useFormState } from "react-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AddUserForm() {
   const initialState = { message: null, errors: {} };
@@ -14,20 +15,23 @@ export default function AddUserForm() {
   const [state, formActions] = useFormState(addUser, initialState);
 
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
-    // console.log("state", state);
+    console.log("current state", state, state.errors != null);
     if (state != null && state.message != null) {
-      if (state.errors != null) {
+      if (state.errors != null) { 
         toast({
           title: "Error",
           description: state.message,
           variant: "destructive",
-          duration: 3000,
+          duration: 2000,
         });
       } else {
+        router.push("/dashboard/users");
         toast({
           title: "Success",
+          variant: "success",
           description: state.message,
           duration: 3000,
         });

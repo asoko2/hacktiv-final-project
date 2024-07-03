@@ -115,30 +115,12 @@ class SubmissionController extends BaseController
     public function show($id = null)
     {
         try {
-            $submissionModel = new \App\Models\SubmissionModel();
+            $submissionDetailViewModel = new \App\Models\SubmissionDetailViewModel();
 
-            $builder = $submissionModel->builder();
-
-            $data = $builder
-                ->select([
-                    'submissions.*',
-                    'submission_status.status_name as status_name',
-                    'requester.username as request_user_username',
-                    'approval_atasan.username as atasan_username',
-                    'approval_hrd.username as hrd_username',
-                    'authenticator.username as authenticator_username',
-                    'need_revision.username as need_revision_username',
-                    'rejector.username as rejector_username',
-                ])
-                ->join('submission_status', 'submission_status.id = submissions.status', 'left')
-                ->join('users as requester', 'requester.id = submissions.request_user_id', 'left')
-                ->join('users as approval_atasan', 'approval_atasan.id = submissions.approval_one_user_id', 'left')
-                ->join('users as approval_hrd', 'approval_hrd.id = submissions.approval_two_user_id', 'left')
-                ->join('users as authenticator', 'authenticator.id = submissions.authenticator_user_id', 'left')
-                ->join('users as need_revision', 'need_revision.id = submissions.need_revision_user_id', 'left')
-                ->join('users as rejector', 'rejector.id = submissions.rejected_user_id', 'left')
+            $data = $submissionDetailViewModel
                 ->where('submissions.id', $id)
-                ->get()->getRow();
+                ->get()
+                ->getRow();
 
             return $this->response->setJSON([
                 'status' => 200,
@@ -182,6 +164,31 @@ class SubmissionController extends BaseController
                 'status' => 500,
                 'error' => $submissionModel->errors(),
                 'message' => 'Update Submission Request failed',
+            ]);
+        }
+    }
+
+    public function send($id)
+    {
+        $submissionModel = new \App\Models\SubmissionModel();
+        $data = [
+            'status' => 2,
+        ];
+
+        try {
+            $submissionModel->update($id, $data);
+            log_message('info', 'send submission success');
+            return $this->response->setJSON([
+                'status' => 200,
+                'error' => null,
+                'message' => 'Submission Request sent',
+            ]);
+        } catch (\Throwable $th) {
+            log_message('debug', 'send submission error' . $th->getMessage() . ' | ' . json_encode($submissionModel->errors()));
+            return $this->response->setJSON([
+                'status' => 500,
+                'error' => $submissionModel->errors(),
+                'message' => 'Submission Request failed',
             ]);
         }
     }
@@ -423,21 +430,13 @@ class SubmissionController extends BaseController
             ->select([
                 'submissions.*',
                 'submission_status.status_name as status_name',
+                'submission_status.status_code as status_code',
                 'requester.username as request_user_username',
-                'approval_atasan.username as atasan_username',
-                'approval_hrd.username as hrd_username',
-                'authenticator.username as authenticator_username',
-                'need_revision.username as need_revision_username',
-                'rejector.username as rejector_username',
             ])
             ->join('submission_status', 'submission_status.id = submissions.status', 'left')
             ->join('users as requester', 'requester.id = submissions.request_user_id', 'left')
-            ->join('users as approval_atasan', 'approval_atasan.id = submissions.approval_one_user_id', 'left')
-            ->join('users as approval_hrd', 'approval_hrd.id = submissions.approval_two_user_id', 'left')
-            ->join('users as authenticator', 'authenticator.id = submissions.authenticator_user_id', 'left')
-            ->join('users as need_revision', 'need_revision.id = submissions.need_revision_user_id', 'left')
-            ->join('users as rejector', 'rejector.id = submissions.rejected_user_id', 'left')
             ->where('request_user_id', $id)
+            ->orderBy('status', 'asc')
             ->orderBy('id', 'asc')
             ->findAll();
 

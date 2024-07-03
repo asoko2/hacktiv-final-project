@@ -1,47 +1,74 @@
+"use client";
 import { getSubmissionItems } from "@/api/submission-items-api";
-import { columns } from "@/app/dashboard/submissions/[id]/columns";
+import AddItemForm from "@/app/dashboard/submissions/[id]/add-item-form";
+// import { columns } from "@/app/dashboard/submissions/[id]/columns";
+import SubmissionDetailCard from "@/app/dashboard/submissions/[id]/components/submission-detail-card";
+import SubmissionItemsButtons from "@/app/dashboard/submissions/[id]/components/submission-items-buttons";
 import SubmissionItemsTable from "@/app/dashboard/submissions/[id]/submission-items-table";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
+import { Submission, SubmissionItem } from "@/lib/definition";
+import { ColumnDef } from "@tanstack/react-table";
 
-export default async function SubmissionItemSection({ id }: { id: string }) {
-  const submissionData = await getSubmissionItems(id);
+export default function SubmissionItemSection({
+  submissionData,
+}: {
+  submissionData: {
+    items: SubmissionItem[];
+    submission: Submission;
+  };
+}) {
+  const columns: ColumnDef<SubmissionItem>[] = [
+    {
+      id: "rowNumber",
+      header: "No",
+      cell: ({ row }) => row.index + 1,
+    },
+    {
+      accessorKey: "itemName",
+      header: "Nama Barang",
+    },
+    {
+      accessorKey: "price",
+      header: () => <div className="w-full text-right">Harga</div>,
+
+      cell: ({ row }) => (
+        <div className="text-right">
+          {new Intl.NumberFormat("id-ID").format(row.original.price)}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "qty",
+      header: () => <div className="w-full text-right">Jumlah Barang</div>,
+      cell: ({ row }) => (
+        <div className="text-right">
+          {new Intl.NumberFormat("id-ID").format(row.original.qty)}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "total",
+      header: () => <div className="w-full text-right">Total Harga</div>,
+      cell: ({ row }) => (
+        <div className="text-right">
+          {new Intl.NumberFormat("id-ID").format(row.original.total)}
+        </div>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => <SubmissionItemsButtons data={row.original} submission={submissionData.submission}  />,
+    },
+  ];
 
   return (
     <div>
-      <div className="mb-8">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link href="/dashboard">Dashboard</Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <Link href="/dashboard/submissions">Pengajuan Barang</Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{submissionData.submission.name}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      <Card className="bg-transparent border-0 shadow-none">
-        <CardContent className="p-4">
-          <h1 className="text-xl font-semibold mb-2">
-            Detail Pengajuan - {submissionData.submission.name}
-          </h1>
-          <SubmissionItemsTable data={submissionData.items} columns={columns} />
-        </CardContent>
-      </Card>
+      <SubmissionDetailCard submission={submissionData.submission} />
+      {submissionData.submission.status === 1 && (
+        <div className="mb-4">
+          <AddItemForm submission_id={submissionData.submission.id} />
+        </div>
+      )}
+      <SubmissionItemsTable data={submissionData.items} columns={columns} />
     </div>
   );
 }

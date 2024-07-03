@@ -8,6 +8,7 @@ import { useFormState } from "react-dom";
 import { User } from "@/lib/definition";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function EditUserForm({ user }: { user: User }) {
   const initialState = { message: null, errors: {} };
@@ -16,10 +17,11 @@ export default function EditUserForm({ user }: { user: User }) {
   const [state, formActions] = useFormState(editUserWithId, initialState);
 
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     if (state != null && state.message != null) {
-      if (state.errors != null && state.errors.groups != null) {
+      if (state.errors != null) {
         toast({
           title: "Error",
           description: state.message,
@@ -27,8 +29,10 @@ export default function EditUserForm({ user }: { user: User }) {
           duration: 3000,
         });
       } else {
+        router.push("/dashboard/users");
         toast({
           title: "Success",
+          variant: "success",
           description: state.message,
           duration: 3000,
         });

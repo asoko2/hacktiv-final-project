@@ -5,7 +5,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -40,34 +40,133 @@ export default function SubmissionDetailSkeleton() {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <Card className="bg-transparent border-0 shadow-none">
+      <Card className="mb-4 shadow-none">
+        <CardHeader className="p-4">
+          <CardTitle>Detail Pengajuan</CardTitle>
+        </CardHeader>
+        <Separator />
         <CardContent className="p-4">
-          <h1 className="text-xl font-semibold flex items-center gap-2 mb-2">
-            Detail Pengajuan - <Skeleton className="w-36 h-4 rounded" />
-          </h1>
-          <Table className="bg-white rounded-md">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-1/12">NO</TableHead>
-                <TableHead className="w-3/12">Nama Barang</TableHead>
-                <TableHead className="w-1/12 text-right">Harga</TableHead>
-                <TableHead className="w-2/12 text-right">
-                  Jumlah Barang
-                </TableHead>
-                <TableHead className="w-2/12 text-right">Total Harga</TableHead>
-                <TableHead></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={6}>
+          <div className="grid grid-cols-3 gap-16">
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Nama Pengajuan
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
                   <Skeleton className="w-full h-4 rounded" />
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Tahun Pengajuan
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Total Harga
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Status Pengajuan
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">Pemohon</label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Approval Atasan
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Approval HRD
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Approval Pengesah
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">Pemohon</label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Approval Atasan
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Approval HRD
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <label className="text-sm text-gray-500 w-1/2">
+                  Approval Pengesah
+                </label>
+                <p className="font-semibold text-sm w-1/2 text-right">
+                  <Skeleton className="w-full h-4 rounded" />
+                </p>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
+      <Table className="bg-white rounded-md">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-1/12">No</TableHead>
+            <TableHead className="w-3/12">Nama Barang</TableHead>
+            <TableHead className="w-1/12 text-right">Harga</TableHead>
+            <TableHead className="w-2/12 text-right">Jumlah Barang</TableHead>
+            <TableHead className="w-2/12 text-right">Total Harga</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={6}>
+              <Skeleton className="w-full h-4 rounded" />
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   );
 }

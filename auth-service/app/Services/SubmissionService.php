@@ -24,6 +24,19 @@ class SubmissionService
     return json_decode($response->getBody());
   }
 
+  public function sendSubmission($id)
+  {
+    $response = $this->client->put($this->baseUrl . "/submissions/$id/send");
+
+    if ($response->getStatusCode() !== 200) {
+      log_message('debug', 'SubmissionService::sendSubmission() succsee response: ' . json_encode($response));
+      return json_decode($response->getBody());
+    } else {
+      log_message('debug', 'SubmissionService::sendSubmission() response: ' . json_encode($response));
+      return json_decode($response->getBody());
+    }
+  }
+
   public function approvalAtasan($id, $data)
   {
     $response = $this->client->put($this->baseUrl . "/submissions/$id/approval-atasan", [
@@ -111,6 +124,15 @@ class SubmissionService
     return json_decode($response->getBody());
   }
 
+  public function storeItem($data)
+  {
+    $response = $this->client->post($this->baseUrl . "/submission-items", [
+      'json' => $data
+    ]);
+
+    return json_decode($response->getBody());
+  }
+
   public function updateItem($id, $data)
   {
     $response = $this->client->put($this->baseUrl . "/submission-items/$id", [
@@ -123,6 +145,13 @@ class SubmissionService
   public function destroy($id)
   {
     $response = $this->client->delete($this->baseUrl . "/submissions/$id");
+
+    return json_decode($response->getBody());
+  }
+
+  public function destroyItem($id)
+  {
+    $response = $this->client->delete($this->baseUrl . "/submission-items/$id");
 
     return json_decode($response->getBody());
   }

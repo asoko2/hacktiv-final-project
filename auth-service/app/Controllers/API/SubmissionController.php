@@ -38,6 +38,17 @@ class SubmissionController extends BaseController
         return $this->respondCreated($response);
     }
 
+    public function sendSubmission($id)
+    {
+        $response = $this->submissionService->sendSubmission($id);
+
+        if (!$response->status === 200) {
+            return $this->fail($response, $response->status);
+        }
+
+        return $this->respond($response);
+    }
+
     public function approvalAtasan($id)
     {
         $data = $this->request->getJSON();
@@ -194,6 +205,18 @@ class SubmissionController extends BaseController
         return $this->respond($response);
     }
 
+    public function storeItem()
+    {
+        $data = $this->request->getJSON();
+        $response = $this->submissionService->storeItem($data);
+
+        if (!$response->status === 200) {
+            return $this->fail($response, $response->status);
+        }
+
+        return $this->respondCreated($response);
+    }
+
     public function updateItem($id)
     {
         $data = $this->request->getJSON();
@@ -204,6 +227,17 @@ class SubmissionController extends BaseController
         }
 
         return $this->respond($response);
+    }
+
+    public function destroyItem($id)
+    {
+        $response = $this->submissionService->destroyItem($id);
+
+        if (!$response->status === 200) {
+            return $this->fail($response, $response->status);
+        }
+
+        return $this->respondDeleted($response);
     }
 
 }

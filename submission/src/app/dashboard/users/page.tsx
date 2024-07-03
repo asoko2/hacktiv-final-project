@@ -3,6 +3,7 @@ import { columns } from "@/app/dashboard/users/columns";
 import UsersCard from "@/app/dashboard/users/users-card";
 // import { users } from "@/app/dashboard/users/data";
 import { UsersTable } from "@/app/dashboard/users/users-table";
+import UsersTableSkeleton from "@/app/dashboard/users/users-table-skeleton";
 import CheckPermission from "@/components/check-permission";
 import {
   Breadcrumb,
@@ -32,11 +33,9 @@ export default function UsersPage() {
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        <div className="flex flex-1">
-          <Suspense fallback={<div>Loading...</div>}>
-            <UsersCard />
-          </Suspense>
-        </div>
+        <Suspense fallback={<UsersTableSkeleton />}>
+          <UsersCard />
+        </Suspense>
       </div>
     </CheckPermission>
   );

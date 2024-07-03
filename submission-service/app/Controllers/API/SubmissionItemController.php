@@ -2,16 +2,46 @@
 
 namespace App\Controllers\API;
 
+use App\Models\SubmissionItemModel;
 use CodeIgniter\HTTP\ResponseInterface;
+use stdClass;
 
 class SubmissionItemController extends BaseController
 {
+    public function store()
+    {
+        $submissionItemModel = new SubmissionItemModel();
+
+        $data = $this->request->getJSON();
+
+        try {
+            $submissionItemModel->insert($data);
+
+            $this->updateSubmissionAfterUpdateItem($data->submission_id);
+
+            return $this->response->setJSON([
+                'status' => 200,
+                'error' => null,
+                'message' => 'Data saved',
+                'data' => null
+            ]);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'status' => 500,
+                'error' => $e->getMessage(),
+                'message' => 'Data not saved',
+                'data' => new stdClass
+            ]);
+
+        }
+    }
+
     public function showItems($id)
     {
-        $submissionModel = new \App\Models\SubmissionModel();
-        $submissionItemModel = new \App\Models\SubmissionItemModel();
+        $submissionDetailViewModel = new \App\Models\SubmissionDetailViewModel();
+        $submissionItemModel = new SubmissionItemModel();
 
-        $submission = $submissionModel->find($id);
+        $submission = $submissionDetailViewModel->find($id);
 
         $data = $submissionItemModel->where('submission_id', $id)->orderBy('id', 'ASC')->findAll();
 
@@ -27,14 +57,14 @@ class SubmissionItemController extends BaseController
             ];
         }
 
-        if ($data) {
+        if ($submission) {
             return $this->response->setJSON([
                 'status' => 200,
                 'error' => null,
                 'message' => 'Data found',
                 'data' => [
                     'submission' => $submission,
-                    'items' => $items
+                    'items' => $data ? $items : new stdClass
                 ]
             ]);
         } else {
@@ -42,7 +72,7 @@ class SubmissionItemController extends BaseController
                 'status' => 200,
                 'error' => null,
                 'message' => 'Data not found',
-                'data' => new \stdClass
+                'data' => new stdClass
             ]);
         }
     }
@@ -100,5 +130,34 @@ class SubmissionItemController extends BaseController
             'total_item' => $totalItem,
             'total_price' => $totalPrice
         ]);
+    }
+
+    public function destroy($id = null)
+    {
+        $submissionItemModel = new \App\Models\SubmissionItemModel();
+
+        $item = $submissionItemModel->find($id);
+
+        if ($item) {
+            $submissionItem = $submissionItemModel->find($id);
+
+            $submissionItemModel->delete($id);
+
+            $this->updateSubmissionAfterUpdateItem($submissionItem['submission_id']);
+
+            return $this->response->setJSON([
+                'status' => 200,
+                'error' => null,
+                'message' => 'Data deleted',
+                'data' => new \stdClass
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 404,
+                'error' => 'Data not found',
+                'message' => 'Data not found',
+                'data' => new \stdClass
+            ]);
+        }
     }
 }

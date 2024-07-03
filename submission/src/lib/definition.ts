@@ -20,13 +20,21 @@ export type Submission = {
   total_qty: number;
   total_price: number;
   total_item: number;
-  status: string;
+  status: number;
   year: number;
+  status_code?: string;
+  status_name?: string;
+  request_user_name?: string;
+  atasan_name?: string;
+  hrd_name?: string;
+  authenticator_name?: string;
+  need_revision_name?: string;
+  rejector_name?: string;
 };
 
 export type SubmissionItem = {
   id?: any;
-  [itemName: string]: any;
+  [itemName: string | symbol]: any;
   price?: any;
   qty?: any;
   total?: any;

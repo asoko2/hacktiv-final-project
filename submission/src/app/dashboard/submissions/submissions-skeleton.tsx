@@ -1,24 +1,9 @@
 "use client";
 
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { DataTablePagination } from "@/components/data-table/data-table-pagination";
-import DataTable from "@/components/data-table/data-table";
 import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export function SubmissionsTable() {

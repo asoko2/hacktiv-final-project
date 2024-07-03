@@ -220,3 +220,42 @@ export async function deleteSubmission(
     message: "Berhasil menghapus submission",
   };
 }
+
+export async function sendSubmission(
+  prevState:
+    | {
+        error?: boolean;
+        message?: string;
+      }
+    | undefined,
+  formData: FormData
+) {
+  const token = cookies().get("accessToken")?.value;
+
+  const response = await fetch(
+    `${process.env.API_URL}/submissions/${formData.get("id")}/send`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const responseJson = await response.json();
+
+  console.log("responseJson", responseJson);
+
+  if (!response.ok) {
+    return {
+      error: true,
+      message: "Gagal mengirim submission",
+    };
+  }
+
+  revalidatePath("/dashboard/submissions");
+  return {
+    error: false,
+    message: "Berhasil mengirim submission",
+  };
+}

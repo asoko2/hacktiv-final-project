@@ -68,3 +68,24 @@ const setAuthCookie = (response: Response) => {
     }
   }
 };
+
+export async function logout() {
+  const response = await fetch(`${process.env.API_URL}/auth/logout`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${cookies().get("accessToken")?.value}`,
+    },
+  });
+
+  const responseJson = await response.json();
+
+  console.log("responseJson = ", responseJson);
+
+  if (response.ok) {
+    cookies().delete("accessToken");
+    cookies().delete("group");
+    redirect("/login");
+  }
+}
