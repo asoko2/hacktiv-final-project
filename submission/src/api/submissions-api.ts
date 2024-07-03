@@ -259,3 +259,13 @@ export async function sendSubmission(
     message: "Berhasil mengirim submission",
   };
 }
+
+export async function getAllSubmission(): Promise<Submission[]> {
+  const token = cookies().get("accessToken")?.value;
+
+  const response = await fetch(`${process.env.API_URL}/submissions`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
