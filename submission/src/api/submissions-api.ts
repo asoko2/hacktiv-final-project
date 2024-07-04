@@ -281,3 +281,177 @@ export async function getSubmissionApproval(): Promise<Submission[]> {
 
   return responseJson.data;
 }
+
+export type SendRevisionState = {
+  errors?: {
+    reason?: string[];
+  };
+  message?: string | null;
+};
+
+const sendRevisionSchema = z.object({
+  reason: z.coerce
+    .string({
+      required_error: "Alasan harus diisi",
+    })
+    .min(1, {
+      message: "Alasan harus diisi",
+    }),
+});
+
+export async function sendRevision(
+  prevState: SendRevisionState,
+  formData: FormData
+) {
+  const validatedFields = sendRevisionSchema.safeParse({
+    reason: formData.get("reason")?.toString().trim(),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Alasan harus diisi",
+    };
+  }
+
+  const { reason } = validatedFields.data;
+
+  const token = cookies().get("accessToken")?.value;
+
+  const response = await fetch(
+    `${process.env.API_URL}/submissions/${formData.get(
+      "submissionId"
+    )}/need-revision`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ reason }),
+    }
+  );
+
+  const responseJson = await response.json();
+
+  console.log("responseJson", responseJson);
+
+  if (!response.ok) {
+    return {
+      errors: responseJson.errors,
+      message: responseJson.message,
+    };
+  }
+
+  revalidatePath("/dashboard/submissions/monitor/[id]");
+  return {
+    errors: null,
+    message: "Berhasil mengirim revisi submission",
+  };
+}
+
+export type SendRejectState = {
+  errors?: {
+    reason?: string[];
+  };
+  message?: string | null;
+};
+
+const sendRejectSchema = z.object({
+  reason: z.coerce
+    .string({
+      required_error: "Alasan harus diisi",
+    })
+    .min(1, {
+      message: "Alasan harus diisi",
+    }),
+});
+
+export async function sendReject(
+  prevState: SendRejectState,
+  formData: FormData
+) {
+  const validatedFields = sendRejectSchema.safeParse({
+    reason: formData.get("reason")?.toString().trim(),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Alasan harus diisi",
+    };
+  }
+
+  const { reason } = validatedFields.data;
+
+  const token = cookies().get("accessToken")?.value;
+
+  const response = await fetch(
+    `${process.env.API_URL}/submissions/${formData.get("submissionId")}/reject`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ reason }),
+    }
+  );
+
+  const responseJson = await response.json();
+
+  console.log("responseJson", responseJson);
+
+  if (!response.ok) {
+    return {
+      errors: responseJson.errors,
+      message: responseJson.message,
+    };
+  }
+
+  setTimeout(() => {
+    revalidatePath("/dashboard/submissions/monitor/[id]", "page");
+  }, 1000);
+
+  return {
+    errors: null,
+    message: "Berhasil menolak pengajuan",
+  };
+}
+
+export async function approvalAtasan(
+  prevState:
+    | {
+        error?: boolean;
+        message?: string;
+      }
+    | undefined,
+  formData: FormData
+) {
+  const token = cookies().get("accessToken")?.value;
+
+  const response = await fetch(
+    `${process.env.API_URL}/submissions/${formData.get("id")}/approval-atasan`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const responseJson = await response.json();
+
+  console.log("responseJson", responseJson);
+
+  if (!response.ok) {
+    return {
+      error: true,
+      message: "Gagal approve submission",
+    };
+  }
+
+  revalidatePath(`/dashboard/submission/monitor/${formData.get("id")}`, "page");
+  return {
+    error: false,
+    message: "Berhasil approve submission",
+  };
+}

@@ -200,7 +200,7 @@ class SubmissionController extends BaseController
 
         $data = [
             'approval_one_user_id' => $input->approval_user_id,
-            'status' => 2,
+            'status' => 3,
         ];
 
         $this->validation->setRuleGroup('approval_atasan');
@@ -338,7 +338,7 @@ class SubmissionController extends BaseController
         $data = [
             'reason_need_revision' => $input->reason_need_revision,
             'need_revision_user_id' => $input->need_revision_user_id,
-            'status' => 6,
+            'status' => 7,
         ];
 
         $this->validation->setRuleGroup('need_revision_submission');
@@ -347,10 +347,12 @@ class SubmissionController extends BaseController
             return $this->response->setJSON([
                 'status' => 500,
                 'error' => $this->validation->getErrors(),
-                'message' => 'Need Revision failed',
+                'message' => 'Need Revision Validation failed',
             ]);
         }
 
+        log_message('debug', 'ID --> ' . $id);
+        log_message('debug', 'Data: ' . json_encode($data));
         try {
             $submissionModel->update($id, $data);
             return $this->response->setJSON([
@@ -362,7 +364,7 @@ class SubmissionController extends BaseController
             return $this->response->setJSON([
                 'status' => 500,
                 'error' => $submissionModel->errors(),
-                'message' => 'Need Revision failed',
+                'message' => 'Need Revision Models failed',
             ]);
         }
     }
@@ -375,7 +377,7 @@ class SubmissionController extends BaseController
         $data = [
             'reason_rejected' => $input->reason_rejected,
             'rejected_user_id' => $input->rejected_user_id,
-            'status' => 7,
+            'status' => 8,
         ];
 
         $this->validation->setRuleGroup('reject_submission');
@@ -460,17 +462,10 @@ class SubmissionController extends BaseController
     public function showApproval()
     {
         $data = $this->request->getJSON();
-        $submissionModel = new \App\Models\SubmissionModel();
-        $data = $submissionModel
-            ->select([
-                'submissions.*',
-                'submission_status.status_name as status_name',
-                'requester.username as request_user_username',
-            ])
-            ->join('submission_status', 'submission_status.id = submissions.status', 'left')
-            ->join('users as requester', 'requester.id = submissions.request_user_id', 'left')
-            ->where('submissions.status', $data->status)
-            ->orderBy('submissions.status', 'asc')
+        $submissionDetailViewModel = new \App\Models\SubmissionDetailViewModel();
+        $data = $submissionDetailViewModel
+            ->where('status', $data->status)
+            ->orderBy('status', 'asc')
             ->orderBy('id', 'asc')
             ->findAll();
 

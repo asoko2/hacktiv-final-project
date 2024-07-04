@@ -51,10 +51,11 @@ class SubmissionController extends BaseController
 
     public function approvalAtasan($id)
     {
-        $data = $this->request->getJSON();
-        $response = $this->submissionService->approvalAtasan($id, $data);
+        $userId = auth()->user()->id;
 
-        log_message('debug', 'SubmissionController::approvalAtasan() response: ' . json_encode($response));
+        $response = $this->submissionService->approvalAtasan($id, [
+            'approval_user_id' => $userId,
+        ]);
 
         if (!$response->status === 200) {
             return $this->fail($response, $response->status);
@@ -65,8 +66,11 @@ class SubmissionController extends BaseController
 
     public function approvalHRD($id)
     {
-        $data = $this->request->getJSON();
-        $response = $this->submissionService->approvalHRD($id, $data);
+        $userId = auth()->user()->id;
+
+        $response = $this->submissionService->approvalAtasan($id, [
+            'approval_user_id' => $userId,
+        ]);
 
         log_message('debug', 'SubmissionController::approvalHRD() response: ' . json_encode($response));
 
@@ -121,9 +125,13 @@ class SubmissionController extends BaseController
     public function needRevision($id)
     {
         $data = $this->request->getJSON();
-        $response = $this->submissionService->needRevision($id, $data);
 
-        log_message('debug', 'SubmissionController::needRevision() response: ' . json_encode($response));
+        $userId = auth()->user()->id;
+
+        $response = $this->submissionService->needRevision($id, [
+            'reason_need_revision' => $data->reason,
+            'need_revision_user_id' => $userId,
+        ]);
 
         if (!$response->status === 200) {
             return $this->fail($response, $response->status);
@@ -147,9 +155,12 @@ class SubmissionController extends BaseController
     public function reject($id)
     {
         $data = $this->request->getJSON();
-        $response = $this->submissionService->reject($id, $data);
+        $userId = auth()->user()->id;
 
-        log_message('debug', 'SubmissionController::reject() response: ' . json_encode($response));
+        $response = $this->submissionService->reject($id, [
+            'reason_rejected' => $data->reason,
+            'rejected_user_id' => $userId,
+        ]);
 
         if (!$response->status === 200) {
             return $this->fail($response, $response->status);
@@ -245,7 +256,7 @@ class SubmissionController extends BaseController
         $data = $this->request->getJSON();
 
         log_message('debug', 'SubmissionController::showApproval() data: ' . json_encode($data));
-        
+
         $group = $data->group;
 
         switch ($group) {

@@ -26,8 +26,8 @@ $routes->group('api', function ($routes) {
       $routes->post('', [SubmissionController::class, 'storeSubmission']);
 
       $routes->post('approval', [SubmissionController::class, 'showApproval']);
-      $routes->get('(:segment)', [SubmissionController::class, 'show/$1']);
       $routes->get('(:segment)/items', [SubmissionController::class, 'showItems/$1']);
+      $routes->get('(:segment)', [SubmissionController::class, 'show/$1']);
       $routes->delete('(:segment)', [SubmissionController::class, 'destroy/$1']);
 
       $routes->put('(:segment)/approval-atasan', [SubmissionController::class, 'approvalAtasan/$1']);
@@ -35,10 +35,11 @@ $routes->group('api', function ($routes) {
       $routes->put('(:segment)/approval-pengesah', [SubmissionController::class, 'approvalPengesah/$1']);
 
       $routes->put('(:segment)/need-revision', [SubmissionController::class, 'needRevision/$1']);
-      $routes->put('(:segment)', [SubmissionController::class, 'update/$1']);
       $routes->put('(:segment)/send', [SubmissionController::class, 'sendSubmission/$1']);
-
       $routes->put('(:segment)/reject', [SubmissionController::class, 'reject/$1']);
+
+      $routes->put('(:segment)', [SubmissionController::class, 'update/$1']);
+
 
       $routes->post('(:segment)/upload-invoice', [SubmissionController::class, 'uploadInvoice/$1']);
 

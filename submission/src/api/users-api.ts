@@ -9,7 +9,7 @@ import { error } from "console";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import { string, z } from "zod";
 
 export type State = {
   errors?: {
@@ -31,9 +31,8 @@ const formSchema = z.object({
       message: "Nama harus diisi",
     }),
   nip: z.coerce
-    .number({
-      invalid_type_error: "NIP harus diisi angka",
-    })
+    .string()
+    .regex(/^\d+$/, "NIP harus diisi angka")
     .min(1, {
       message: "NIP harus diisi",
     }),
@@ -53,6 +52,8 @@ const AddUser = formSchema.omit({ id: true });
 const EditUser = formSchema.omit({ id: true });
 
 export async function addUser(prevState: State, formData: FormData) {
+  console.log("nip", formData.get("nip"));
+
   const validatedFields = AddUser.safeParse({
     name: formData.get("name"),
     nip: formData.get("nip"),
@@ -69,6 +70,8 @@ export async function addUser(prevState: State, formData: FormData) {
 
   const { name, nip, username, email } = validatedFields.data;
 
+  console.log("nip", nip);
+
   const token = cookies().get("accessToken")?.value;
 
   const response = await fetch(`${process.env.API_URL}/users`, {
@@ -81,10 +84,6 @@ export async function addUser(prevState: State, formData: FormData) {
   });
   const responseJson = await response.json();
 
-  console.log("responseJson", responseJson);
-
-  console.log('resposne status', responseJson.status, responseJson.status == 409)
-  
   if (
     // responseJson.status == 400 ||
     // responseJson.status == 500 ||

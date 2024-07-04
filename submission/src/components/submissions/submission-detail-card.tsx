@@ -54,15 +54,15 @@ export default function SubmissionDetailCard({
               <div
                 className={cn(
                   {
-                    "bg-red-500 text-white": submission.status == 1,
+                    "bg-red-500 text-white": submission.status === "1",
                     "bg-primary-500 text-white":
-                      submission.status == 2 ||
-                      submission.status == 3 ||
-                      submission.status == 4 ||
-                      submission.status == 5 ||
-                      submission.status == 6 ||
-                      submission.status == 7,
-                    "bg-green-500 text-white": submission.status == 8,
+                      submission.status === "2" ||
+                      submission.status === "3" ||
+                      submission.status === "4" ||
+                      submission.status === "5" ||
+                      submission.status === "6" ||
+                      submission.status === "7",
+                    "bg-green-500 text-white": submission.status === "8",
                   },
                   "rounded-md p-2 w-1/2 flex justify-center items-center"
                 )}
@@ -106,28 +106,52 @@ export default function SubmissionDetailCard({
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-4 items-center">
-              <label className="text-sm text-gray-500 w-1/2">
-                Direvisi oleh
-              </label>
-              <p className="font-semibold text-sm w-1/2 text-right">
-                {submission.need_revision_name}
-              </p>
-            </div>
-            <div className="flex gap-4 items-center">
-              <label className="text-sm text-gray-500 w-1/2">
-                Ditolak oleh
-              </label>
-              <p className="font-semibold text-sm w-1/2 text-right">
-                {submission.rejector_name}
-              </p>
-            </div>
+            {submission.need_revision_user_id !== null && (
+              <>
+                <div className="flex gap-4 items-center">
+                  <label className="text-sm text-gray-500 w-1/2">
+                    Direvisi oleh
+                  </label>
+                  <p className="font-semibold text-sm w-1/2 text-right">
+                    {submission.need_revision_name}
+                  </p>
+                </div>
+                <div className="flex gap-4 items-center">
+                  <label className="text-sm text-gray-500 w-1/2">
+                    Alasan Revisi
+                  </label>
+                  <p className="font-semibold text-sm w-1/2 text-right">
+                    {submission.reason_need_revision}
+                  </p>
+                </div>
+              </>
+            )}
+            {submission.rejected_user_id !== null && (
+              <>
+                <div className="flex gap-4 items-center">
+                  <label className="text-sm text-gray-500 w-1/2">
+                    Ditolak oleh
+                  </label>
+                  <p className="font-semibold text-sm w-1/2 text-right">
+                    {submission.rejector_name}
+                  </p>
+                </div>
+                <div className="flex gap-4 items-center">
+                  <label className="text-sm text-gray-500 w-1/2">
+                    Alasan ditolak
+                  </label>
+                  <p className="font-semibold text-sm w-1/2 text-right">
+                    {submission.reason_rejected}
+                  </p>
+                </div>
+              </>
+            )}
             <div className="flex gap-2 items-center justify-between">
               {monitor && (
                 <>
-                  <RevisionSubmissionButton />
-                  <RejectSubmissionButton />
-                  <ApproveSubmissionButton />
+                  <RevisionSubmissionButton submissionId={submission.id} />
+                  <RejectSubmissionButton submissionId={submission.id} />
+                  <ApproveSubmissionButton submissionId={submission.id} />
                 </>
               )}
             </div>

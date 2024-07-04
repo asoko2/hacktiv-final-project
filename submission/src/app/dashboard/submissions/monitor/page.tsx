@@ -24,7 +24,7 @@ export default async function SubmissionsPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Monitor Submissions</BreadcrumbPage>
+              <BreadcrumbPage>Monitor Pengajuan</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

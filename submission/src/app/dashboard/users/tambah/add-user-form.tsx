@@ -20,7 +20,8 @@ export default function AddUserForm() {
   useEffect(() => {
     console.log("current state", state, state.errors != null);
     if (state != null && state.message != null) {
-      if (state.errors != null) { 
+      console.log("true");
+      if (state.errors != null) {
         toast({
           title: "Error",
           description: state.message,
@@ -28,11 +29,10 @@ export default function AddUserForm() {
           duration: 2000,
         });
       } else {
-        router.push("/dashboard/users");
         toast({
           title: "Success",
           variant: "success",
-          description: state.message,
+          description: state.message || "Tes",
           duration: 3000,
         });
       }

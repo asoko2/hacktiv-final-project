@@ -7,10 +7,18 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { checkMonitorPermission } from "@/lib/helpers/check-monitor-permission";
 import Link from "next/link";
 
-export default async function SubmissionMonitorDetailWrapper({ id }: { id: string }) {
+export default async function SubmissionMonitorDetailWrapper({
+  id,
+}: {
+  id: string;
+}) {
   const submissionData = await getSubmissionItems(id);
+
+  await checkMonitorPermission(submissionData.submission);
+
   return (
     <div>
       <div className="mb-8">
@@ -21,7 +29,9 @@ export default async function SubmissionMonitorDetailWrapper({ id }: { id: strin
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <Link href="/dashboard/submissions">Pengajuan Barang</Link>
+              <Link href="/dashboard/submissions/monitor">
+                Monitor Pengajuan
+              </Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

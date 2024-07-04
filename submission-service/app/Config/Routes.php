@@ -27,8 +27,8 @@ $routes->group('api', function ($routes) {
     $routes->put('(:segment)/approval-pengesah', [SubmissionController::class, 'approvalPengesah/$1']);
 
     $routes->put('(:segment)/need-revision', [SubmissionController::class, 'needRevision/$1']);
-    $routes->put('(:segment)', [SubmissionController::class, 'update/$1']);
     $routes->put('(:segment)/send', [SubmissionController::class, 'send/$1']);
+    $routes->put('(:segment)', [SubmissionController::class, 'update/$1']);
 
     $routes->put('(:segment)/reject', [SubmissionController::class, 'reject/$1']);
 

@@ -20,7 +20,7 @@ export const columns: ColumnDef<Submission>[] = [
   },
   {
     accessorKey: "total_qty",
-    header: "Jumlah Barang",
+    header: () => <div className="text-right">Jumlah Barang</div>,
     cell: ({ row }) => (
       <div className="text-right">
         {new Intl.NumberFormat("id-ID").format(row.original.total_qty)}
@@ -29,7 +29,7 @@ export const columns: ColumnDef<Submission>[] = [
   },
   {
     accessorKey: "total_price",
-    header: "Total Harga",
+    header: () => <div className="text-right">Total Harga</div>,
     cell: ({ row }) => (
       <div className="text-right">
         {new Intl.NumberFormat("id-ID").format(row.original.total_price)}
@@ -38,7 +38,7 @@ export const columns: ColumnDef<Submission>[] = [
   },
   {
     accessorKey: "total_item",
-    header: "Total Item",
+    header: () => <div className="text-right">Total Item</div>,
     cell: ({ row }) => (
       <div className="text-right">
         {new Intl.NumberFormat("id-ID").format(row.original.total_item)}
@@ -46,8 +46,8 @@ export const columns: ColumnDef<Submission>[] = [
     ),
   },
   {
-    accessorKey: "status_name",
-    header: "Status",
+    accessorKey: "request_user_name",
+    header: "Pemohon",
   },
   {
     accessorKey: "year",

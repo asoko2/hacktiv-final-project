@@ -20,8 +20,12 @@ export type Submission = {
   total_qty: number;
   total_price: number;
   total_item: number;
-  status: number;
+  status: string;
   year: number;
+  reason_need_revision?: string;
+  need_revision_user_id?: string;
+  reason_rejected?: string;
+  rejected_user_id?: string;
   status_code?: string;
   status_name?: string;
   request_user_name?: string;

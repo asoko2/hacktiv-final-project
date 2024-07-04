@@ -12,7 +12,7 @@ export default function SubmissionMonitorItemsButtons({
 }) {
   return (
     <div className="flex items-center justify-center gap-2">
-      {submission.status == 1 && (
+      {submission.status === "1" && (
         <div className="flex gap-2">
           <EditSubmissionItemButton data={data} />
           <DeleteSubmissionItemButton data={data} />

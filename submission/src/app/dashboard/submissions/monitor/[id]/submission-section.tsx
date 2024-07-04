@@ -55,14 +55,20 @@ export default function SubmissionMonitorDetailSection({
     },
     {
       id: "actions",
-      cell: ({ row }) => <SubmissionItemsButtons data={row.original} submission={submissionData.submission}  />,
+      cell: ({ row }) => (
+        <SubmissionItemsButtons
+          data={row.original}
+          submission={submissionData.submission}
+        />
+      ),
     },
   ];
 
   return (
     <div>
       <SubmissionDetailCard submission={submissionData.submission} monitor />
-      {submissionData.submission.status === 1 && (
+      {(submissionData.submission.status === "1" ||
+        submissionData.submission.status === "7") && (
         <div className="mb-4">
           <AddItemForm submission_id={submissionData.submission.id} />
         </div>

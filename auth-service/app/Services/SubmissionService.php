@@ -78,6 +78,9 @@ class SubmissionService
 
   public function needRevision($id, $data)
   {
+
+    log_message('info', 'id: ' . $id);
+    
     $response = $this->client->put($this->baseUrl . "/submissions/$id/need-revision", [
       'json' => $data
     ]);

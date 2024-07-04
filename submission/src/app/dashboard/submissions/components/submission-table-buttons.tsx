@@ -20,10 +20,10 @@ export default function SubmissionTableButtons({
 }) {
   return (
     <div className="flex gap-2 items-center justify-end">
-      {submission.status_code === "draft" && (
+      {(submission.status === "1" || submission.status === "7") && (
         <SendSubmissionButton submission={submission} />
       )}
-      {submission.status_code === "draft" && (
+      {(submission.status === "1" || submission.status === "7") && (
         <EditSubmissionButton submission={submission} />
       )}
       <TooltipProvider>
@@ -38,7 +38,7 @@ export default function SubmissionTableButtons({
           <TooltipContent>Detail</TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      {submission.status_code === "draft" && (
+      {submission.status === "1" && (
         <DeleteSubmissionButton submission={submission} />
       )}
     </div>

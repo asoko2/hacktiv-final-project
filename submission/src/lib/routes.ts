@@ -4,13 +4,13 @@ export const dashboardRoutes = [
     href: "/dashboard",
     permissions: ["apps.common"],
     groups: ["atasan", "hrd", "pengesah", "pegawai"],
-    icon: "ic:round-dashboard",
+    icon: "tabler:layout-dashboard-filled",
   },
   {
     label: "Users",
     href: "/dashboard/users",
     permissions: ["users.manage"],
-    icon: "ic:round-people-alt",
+    icon: "tabler:user-filled",
     groups: ["hrd"],
     children: [
       {
@@ -39,7 +39,7 @@ export const dashboardRoutes = [
       "submission.reject",
     ],
     groups: ["atasan", "hrd", "pengesah", "pegawai"],
-    icon: "ic:round-shopping-bag",
+    icon: "tabler:shopping-cart-filled",
   },
   {
     label: "Monitor Pengajuan",
@@ -52,6 +52,6 @@ export const dashboardRoutes = [
       "submission.reject",
     ],
     groups: ["atasan", "hrd", "pengesah"],
-    icon: "ic:round-shopping-bag",
+    icon: "tabler:copy-check-filled",
   },
 ];
