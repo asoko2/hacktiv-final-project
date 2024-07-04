@@ -1,3 +1,6 @@
+import ApproveSubmissionButton from "@/components/submissions/approve-submission-button";
+import RejectSubmissionButton from "@/components/submissions/reject-submission-button";
+import RevisionSubmissionButton from "@/components/submissions/revision-submission-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Submission } from "@/lib/definition";
@@ -5,8 +8,10 @@ import { cn } from "@/lib/utils";
 
 export default function SubmissionDetailCard({
   submission,
+  monitor = false,
 }: {
   submission: Submission;
+  monitor: boolean;
 }) {
   return (
     <Card className="mb-4 shadow-none">
@@ -102,34 +107,29 @@ export default function SubmissionDetailCard({
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex gap-4 items-center">
-              <label className="text-sm text-gray-500 w-1/2">Pemohon</label>
+              <label className="text-sm text-gray-500 w-1/2">
+                Direvisi oleh
+              </label>
               <p className="font-semibold text-sm w-1/2 text-right">
-                {submission.request_user_name}
+                {submission.need_revision_name}
               </p>
             </div>
             <div className="flex gap-4 items-center">
               <label className="text-sm text-gray-500 w-1/2">
-                Approval Atasan
+                Ditolak oleh
               </label>
               <p className="font-semibold text-sm w-1/2 text-right">
-                {submission.atasan_name}
+                {submission.rejector_name}
               </p>
             </div>
-            <div className="flex gap-4 items-center">
-              <label className="text-sm text-gray-500 w-1/2">
-                Approval HRD
-              </label>
-              <p className="font-semibold text-sm w-1/2 text-right">
-                {submission.hrd_name}
-              </p>
-            </div>
-            <div className="flex gap-4 items-center">
-              <label className="text-sm text-gray-500 w-1/2">
-                Approval Pengesah
-              </label>
-              <p className="font-semibold text-sm w-1/2 text-right">
-                {submission.authenticator_name}
-              </p>
+            <div className="flex gap-2 items-center justify-between">
+              {monitor && (
+                <>
+                  <RevisionSubmissionButton />
+                  <RejectSubmissionButton />
+                  <ApproveSubmissionButton />
+                </>
+              )}
             </div>
           </div>
         </div>

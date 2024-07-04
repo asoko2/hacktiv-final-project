@@ -240,4 +240,37 @@ class SubmissionController extends BaseController
         return $this->respondDeleted($response);
     }
 
+    public function showApproval()
+    {
+        $data = $this->request->getJSON();
+
+        log_message('debug', 'SubmissionController::showApproval() data: ' . json_encode($data));
+        
+        $group = $data->group;
+
+        switch ($group) {
+            case 'atasan':
+                $status = 2;
+                break;
+            case 'hrd':
+                $status = 3;
+                break;
+            case 'pengesah':
+                $status = 5;
+                break;
+            default:
+                return $this->fail('Invalid status', ResponseInterface::HTTP_BAD_REQUEST);
+        }
+
+        log_message('debug', 'SubmissionController::showApproval() status: ' . $status);
+
+        $response = $this->submissionService->showApproval($status);
+
+        if (!$response->status === 200) {
+            return $this->fail($response, $response->status);
+        }
+
+        return $this->respond($response);
+    }
+
 }

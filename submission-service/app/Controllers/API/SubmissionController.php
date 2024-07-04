@@ -456,4 +456,38 @@ class SubmissionController extends BaseController
             ]);
         }
     }
+
+    public function showApproval()
+    {
+        $data = $this->request->getJSON();
+        $submissionModel = new \App\Models\SubmissionModel();
+        $data = $submissionModel
+            ->select([
+                'submissions.*',
+                'submission_status.status_name as status_name',
+                'requester.username as request_user_username',
+            ])
+            ->join('submission_status', 'submission_status.id = submissions.status', 'left')
+            ->join('users as requester', 'requester.id = submissions.request_user_id', 'left')
+            ->where('submissions.status', $data->status)
+            ->orderBy('submissions.status', 'asc')
+            ->orderBy('id', 'asc')
+            ->findAll();
+
+        if ($data) {
+            return $this->response->setJSON([
+                'status' => 200,
+                'error' => null,
+                'message' => 'Data found',
+                'data' => $data
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 200,
+                'error' => null,
+                'message' => 'Data not found',
+                'data' => new \stdClass
+            ]);
+        }
+    }
 }

@@ -24,6 +24,8 @@ $routes->group('api', function ($routes) {
     $routes->group('submissions', function ($routes) {
 
       $routes->post('', [SubmissionController::class, 'storeSubmission']);
+
+      $routes->post('approval', [SubmissionController::class, 'showApproval']);
       $routes->get('(:segment)', [SubmissionController::class, 'show/$1']);
       $routes->get('(:segment)/items', [SubmissionController::class, 'showItems/$1']);
       $routes->delete('(:segment)', [SubmissionController::class, 'destroy/$1']);
@@ -39,6 +41,7 @@ $routes->group('api', function ($routes) {
       $routes->put('(:segment)/reject', [SubmissionController::class, 'reject/$1']);
 
       $routes->post('(:segment)/upload-invoice', [SubmissionController::class, 'uploadInvoice/$1']);
+
     });
 
     $routes->group('submission-items', function ($routes) {

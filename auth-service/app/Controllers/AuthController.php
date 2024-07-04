@@ -23,27 +23,23 @@ class AuthController extends BaseController
         $rules = new ValidationRules();
         $loginRules = $rules->getLoginRules();
 
-        log_message('debug', 'Validate Data');
         if (!$this->validateData($this->request->getJSON(true), $loginRules, )) {
             return $this->fail($this->validator->getErrors());
         }
 
         // Get credentials for login
-        log_message('debug', 'Get credentials');
         $credentials = $this->request->getJSONVar(setting('Auth.validFields'));
         $credentials = array_filter($credentials);
         $credentials['password'] = $this->request->getJsonVar('password');
 
         $authenticator = auth('session')->getAuthenticator();
 
-        log_message('debug', 'Check credentials');
         $result = $authenticator->check($credentials);
 
         if (!$result->isOK()) {
             return $this->failUnauthorized($result->reason());
         }
 
-        log_message('debug', 'Get user');
         $user = $result->extraInfo();
 
         $manager = service('jwtmanager');

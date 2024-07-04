@@ -155,4 +155,15 @@ class SubmissionService
 
     return json_decode($response->getBody());
   }
+
+  public function showApproval($status)
+  {
+    $response = $this->client->get($this->baseUrl . "/submissions/approval/", [
+      'json' => [
+        'status' => $status
+      ]
+    ]);
+
+    return json_decode($response->getBody());
+  }
 }

@@ -7,7 +7,7 @@ import SubmissionDetailCard from "@/components/submissions/submission-detail-car
 import { Submission, SubmissionItem } from "@/lib/definition";
 import { ColumnDef } from "@tanstack/react-table";
 
-export default function SubmissionItemSection({
+export default function SubmissionMonitorDetailSection({
   submissionData,
 }: {
   submissionData: {
@@ -61,7 +61,7 @@ export default function SubmissionItemSection({
 
   return (
     <div>
-      <SubmissionDetailCard submission={submissionData.submission} />
+      <SubmissionDetailCard submission={submissionData.submission} monitor />
       {submissionData.submission.status === 1 && (
         <div className="mb-4">
           <AddItemForm submission_id={submissionData.submission.id} />

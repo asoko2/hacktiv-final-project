@@ -1,6 +1,7 @@
 import DeleteSubmissionButton from "@/app/dashboard/submissions/components/delete-submission-button";
 import EditSubmissionButton from "@/app/dashboard/submissions/components/edit-submission-button";
 import SendSubmissionButton from "@/app/dashboard/submissions/components/send-submission-button";
+import { useAuth } from "@/components/auth-provider";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,

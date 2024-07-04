@@ -260,12 +260,24 @@ export async function sendSubmission(
   };
 }
 
-export async function getAllSubmission(): Promise<Submission[]> {
+export async function getSubmissionApproval(): Promise<Submission[]> {
   const token = cookies().get("accessToken")?.value;
+  const currentGroup = cookies().get("group")?.value;
 
-  const response = await fetch(`${process.env.API_URL}/submissions`, {
+  const response = await fetch(`${process.env.API_URL}/submissions/approval`, {
+    method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({ group: currentGroup }),
   });
+
+  const responseJson = await response.json();
+
+  if (!response.ok) {
+    return [];
+  }
+
+  return responseJson.data;
 }
