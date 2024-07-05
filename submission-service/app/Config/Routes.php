@@ -9,12 +9,14 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
+$routes->get('/file/(:segment)', [SubmissionController::class, 'downloadFile/$1']);
+
 $routes->group('api', function ($routes) {
 
   $routes->group('submissions', function ($routes) {
     $routes->get('/', [SubmissionController::class, 'index']);
     $routes->post('/', [SubmissionController::class, 'store']);
-    
+
     $routes->get('approval', [SubmissionController::class, 'showApproval']);
     $routes->get('(:segment)', [SubmissionController::class, 'show/$1']);
     $routes->delete('(:segment)', [SubmissionController::class, 'destroy/$1']);

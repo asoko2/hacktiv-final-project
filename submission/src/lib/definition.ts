@@ -22,6 +22,7 @@ export type Submission = {
   total_item: number;
   status: string;
   year: number;
+  invoice_dir: string;
   reason_need_revision?: string;
   need_revision_user_id?: string;
   reason_rejected?: string;

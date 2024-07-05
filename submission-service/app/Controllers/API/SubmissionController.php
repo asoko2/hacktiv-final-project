@@ -290,7 +290,10 @@ class SubmissionController extends BaseController
             ]);
         }
 
-        $publicUrl = base_url('uploads/' . $filepath);
+        $uploadedFile = new File($filepath);
+        $uploadedFileName = $uploadedFile->getFilename();
+
+        $publicUrl = base_url('file/' . $uploadedFileName);
 
         $data = [
             'invoice_dir' => $publicUrl,
@@ -478,15 +481,6 @@ class SubmissionController extends BaseController
             ->orderBy('id', 'asc')
             ->findAll();
 
-        // log_message('debug', 'Data: '. json_encode($submissions['name']));
-
-        // if ($submissions['status'] == 5) {
-        //     $publicUrl = base_url($submissions['invoice_dir']);
-
-        //     log_message('info', 'Public URL: ' . $publicUrl);
-
-        // }
-
         if ($submissions) {
             return $this->response->setJSON([
                 'status' => 200,
@@ -503,4 +497,11 @@ class SubmissionController extends BaseController
             ]);
         }
     }
+
+    public function downloadFile($filepath)
+    {
+        $file = new File(WRITEPATH . 'uploads/invoice/' . $filepath);
+        return $this->response->download($file->getRealPath(), null)->inline();
+    }
+
 }
