@@ -3,6 +3,8 @@ import AddItemForm from "@/app/dashboard/submissions/[id]/add-item-form";
 
 import SubmissionItemsButtons from "@/app/dashboard/submissions/[id]/components/submission-items-buttons";
 import SubmissionItemsTable from "@/app/dashboard/submissions/[id]/submission-items-table";
+import { useAuth } from "@/components/auth-provider";
+import CheckApproval from "@/components/submissions/check-approval";
 import SubmissionDetailCard from "@/components/submissions/submission-detail-card";
 import { Submission, SubmissionItem } from "@/lib/definition";
 import { ColumnDef } from "@tanstack/react-table";
@@ -64,8 +66,16 @@ export default function SubmissionMonitorDetailSection({
     },
   ];
 
+  const { currentGroup } = useAuth();
+
   return (
     <div>
+      {((currentGroup === "atasan" &&
+        submissionData.submission.status !== "2") ||
+        (currentGroup === "hrd" &&
+          submissionData.submission.status !== "3")) && (
+        <CheckApproval submission={submissionData.submission} />
+      )}
       <SubmissionDetailCard submission={submissionData.submission} monitor />
       {(submissionData.submission.status === "1" ||
         submissionData.submission.status === "7") && (

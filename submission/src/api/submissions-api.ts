@@ -440,7 +440,83 @@ export async function approvalAtasan(
 
   const responseJson = await response.json();
 
-  console.log("responseJson", responseJson);
+  console.log("responseJson atasan", responseJson);
+
+  if (!response.ok) {
+    return {
+      error: true,
+      message: "Gagal approve submission",
+    };
+  }
+
+  revalidatePath(`/dashboard/submission/monitor/${formData.get("id")}`, "page");
+  return {
+    error: false,
+    message: "Berhasil approve submission",
+  };
+}
+
+export async function approvalHRD(
+  prevState:
+    | {
+        error?: boolean;
+        message?: string;
+      }
+    | undefined,
+  formData: FormData
+) {
+  const token = cookies().get("accessToken")?.value;
+
+  const response = await fetch(
+    `${process.env.API_URL}/submissions/${formData.get("id")}/approval-hrd`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const responseJson = await response.json();
+
+  console.log('responseJson HRD', responseJson)
+
+  if (!response.ok) {
+    return {
+      error: true,
+      message: "Gagal approve submission",
+    };
+  }
+
+  revalidatePath(`/dashboard/submission/monitor/${formData.get("id")}`, "page");
+  return {
+    error: false,
+    message: "Berhasil approve submission",
+  };
+}
+
+export async function approvalPengesah(
+  prevState:
+    | {
+        error?: boolean;
+        message?: string;
+      }
+    | undefined,
+  formData: FormData
+) {
+  const token = cookies().get("accessToken")?.value;
+
+  const response = await fetch(
+    `${process.env.API_URL}/submissions/${formData.get("id")}/approval-pengesah`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const responseJson = await response.json();
 
   if (!response.ok) {
     return {

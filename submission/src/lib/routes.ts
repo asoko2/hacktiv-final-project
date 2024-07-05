@@ -42,7 +42,7 @@ export const dashboardRoutes = [
     icon: "tabler:shopping-cart-filled",
   },
   {
-    label: "Monitor Pengajuan",
+    label: "Approve Pengajuan",
     href: "/dashboard/submissions/monitor",
     permissions: [
       "submission.first-approval",

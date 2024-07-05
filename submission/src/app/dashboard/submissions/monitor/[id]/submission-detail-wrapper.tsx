@@ -1,5 +1,5 @@
 import { getSubmissionItems } from "@/api/submission-items-api";
-import SubmissionMonitorDetailSection from "@/app/dashboard/submissions/monitor/[id]/submission-section";
+import SubmissionMonitorDetailSection from "@/app/dashboard/submissions/monitor/[id]/submission-monitor-detail-section";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,8 +16,6 @@ export default async function SubmissionMonitorDetailWrapper({
   id: string;
 }) {
   const submissionData = await getSubmissionItems(id);
-
-  await checkMonitorPermission(submissionData.submission);
 
   return (
     <div>

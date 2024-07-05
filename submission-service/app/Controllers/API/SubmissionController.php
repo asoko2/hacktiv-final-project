@@ -237,7 +237,7 @@ class SubmissionController extends BaseController
 
         $data = [
             'approval_two_user_id' => $input->approval_user_id,
-            'status' => 3,
+            'status' => 4,
         ];
 
         $this->validation->setRuleGroup('approval_hrd');
@@ -280,12 +280,19 @@ class SubmissionController extends BaseController
             ]);
         }
 
-        $filepath = $invoice->store('invoice');
-        log_message('debug', 'Filepath: ' . $filepath);
+        try {
+            $filepath = $invoice->store('invoice');
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'status' => 500,
+                'error' => $e->getMessage(),
+                'message' => 'Upload Invoice failed',
+            ]);
+        }
 
         $data = [
             'invoice_dir' => $filepath,
-            'status' => 4,
+            'status' => 5,
         ];
 
         try {
@@ -311,7 +318,7 @@ class SubmissionController extends BaseController
 
         $data = [
             'authenticator_user_id' => $input->approval_user_id,
-            'status' => 5,
+            'status' => 6,
         ];
 
         try {

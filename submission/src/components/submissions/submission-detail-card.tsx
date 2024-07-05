@@ -1,3 +1,4 @@
+import { useAuth } from "@/components/auth-provider";
 import ApproveSubmissionButton from "@/components/submissions/approve-submission-button";
 import RejectSubmissionButton from "@/components/submissions/reject-submission-button";
 import RevisionSubmissionButton from "@/components/submissions/revision-submission-button";
@@ -13,6 +14,7 @@ export default function SubmissionDetailCard({
   submission: Submission;
   monitor: boolean;
 }) {
+  const { currentGroup } = useAuth();
   return (
     <Card className="mb-4 shadow-none">
       <CardHeader className="p-4">
@@ -149,9 +151,14 @@ export default function SubmissionDetailCard({
             <div className="flex gap-2 items-center justify-between">
               {monitor && (
                 <>
-                  <RevisionSubmissionButton submissionId={submission.id} />
-                  <RejectSubmissionButton submissionId={submission.id} />
-                  <ApproveSubmissionButton submissionId={submission.id} />
+                  {((submission.status === "2" && currentGroup === "atasan") ||
+                    (submission.status === "3" && currentGroup === "hrd")) && (
+                    <>
+                      <RevisionSubmissionButton submissionId={submission.id} />
+                      <RejectSubmissionButton submissionId={submission.id} />
+                      <ApproveSubmissionButton submissionId={submission.id} />
+                    </>
+                  )}
                 </>
               )}
             </div>

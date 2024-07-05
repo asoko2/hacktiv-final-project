@@ -1,4 +1,9 @@
-import { approvalAtasan } from "@/api/submissions-api";
+import {
+  approvalAtasan,
+  approvalHRD,
+  approvalPengesah,
+} from "@/api/submissions-api";
+import { useAuth } from "@/components/auth-provider";
 import SubmitButton from "@/components/submit-button";
 import {
   AlertDialog,
@@ -8,15 +13,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
@@ -27,8 +29,18 @@ export default function ApproveSubmissionButton({
   submissionId: string;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { currentGroup } = useAuth();
 
-  const [state, formAction] = useFormState(approvalAtasan, undefined);
+  console.log("currentGroup", currentGroup)
+  
+  const [state, formAction] = useFormState(
+    currentGroup === "atasan"
+      ? approvalAtasan
+      : currentGroup === "hrd"
+      ? approvalHRD
+      : approvalPengesah,
+    undefined
+  );
 
   useEffect(() => {
     if (state != null && state.message !== null) {
@@ -73,7 +85,7 @@ export default function ApproveSubmissionButton({
       <AlertDialogContent className="sm:max-w-[350px]">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-center">
-            Apakah Anda yakin ingin approve pengajuan ini?
+            Apakah Anda yakin ingin menyetujui pengajuan ini?
           </AlertDialogTitle>
         </AlertDialogHeader>
         <div className="flex w-full">

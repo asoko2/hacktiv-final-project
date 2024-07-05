@@ -68,11 +68,9 @@ class SubmissionController extends BaseController
     {
         $userId = auth()->user()->id;
 
-        $response = $this->submissionService->approvalAtasan($id, [
+        $response = $this->submissionService->approvalHRD($id, [
             'approval_user_id' => $userId,
         ]);
-
-        log_message('debug', 'SubmissionController::approvalHRD() response: ' . json_encode($response));
 
         if (!$response->status === 200) {
             return $this->fail($response, $response->status);
@@ -110,8 +108,11 @@ class SubmissionController extends BaseController
 
     public function approvalPengesah($id)
     {
-        $data = $this->request->getJSON();
-        $response = $this->submissionService->approvalPengesah($id, $data);
+        $userId = auth()->user()->id;
+
+        $response = $this->submissionService->approvalPengesah($id, [
+            'approval_user_id' => $userId,
+        ]);
 
         log_message('debug', 'SubmissionController::approvalPengesah() response: ' . json_encode($response));
 
