@@ -2,6 +2,7 @@ import { useAuth } from "@/components/auth-provider";
 import ApproveSubmissionButton from "@/components/submissions/approve-submission-button";
 import RejectSubmissionButton from "@/components/submissions/reject-submission-button";
 import RevisionSubmissionButton from "@/components/submissions/revision-submission-button";
+import UploadInvoiceButton from "@/components/submissions/upload-invoice-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Submission } from "@/lib/definition";
@@ -148,6 +149,14 @@ export default function SubmissionDetailCard({
                 </div>
               </>
             )}
+            <div className="flex gap-4 items-center">
+              <label className="text-sm text-gray-500 w-1/2">
+                Download Invoice
+              </label>
+              <p className="font-semibold text-sm w-1/2 text-right">
+                {submission.invoice_dir}
+              </p>
+            </div>
             <div className="flex gap-2 items-center justify-between">
               {monitor && (
                 <>
@@ -160,6 +169,9 @@ export default function SubmissionDetailCard({
                     </>
                   )}
                 </>
+              )}
+              {submission.status === "4" && (
+                <UploadInvoiceButton submission={submission} />
               )}
             </div>
           </div>

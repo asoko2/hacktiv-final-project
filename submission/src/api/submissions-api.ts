@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import fs from "fs";
 
 export type storeSubmissionState = {
   errors?: {
@@ -479,7 +480,7 @@ export async function approvalHRD(
 
   const responseJson = await response.json();
 
-  console.log('responseJson HRD', responseJson)
+  console.log("responseJson HRD", responseJson);
 
   if (!response.ok) {
     return {
@@ -507,7 +508,9 @@ export async function approvalPengesah(
   const token = cookies().get("accessToken")?.value;
 
   const response = await fetch(
-    `${process.env.API_URL}/submissions/${formData.get("id")}/approval-pengesah`,
+    `${process.env.API_URL}/submissions/${formData.get(
+      "id"
+    )}/approval-pengesah`,
     {
       method: "PUT",
       headers: {
@@ -529,5 +532,100 @@ export async function approvalPengesah(
   return {
     error: false,
     message: "Berhasil approve submission",
+  };
+}
+
+const uploadInvoiceSchema = z.object({
+  invoice: z
+    .any()
+    .refine((value) => {
+      return value instanceof File;
+    })
+    .refine((value) => value.size > 0, {
+      message: "File invoice harus dipilih",
+    })
+    .refine(
+      (invoice) => {
+        return invoice.type === "application/pdf";
+      },
+      {
+        message: "File invoice harus berformat PDF",
+      }
+    )
+    .refine((invoice) => invoice.size < 2000000, {
+      message: "Ukuran file invoice maksimal 2MB",
+    }),
+});
+
+export async function uploadInvoice(
+  prevState:
+    | {
+        error?: boolean;
+        message?: string[];
+      }
+    | undefined,
+  formData: FormData
+) {
+  const validatedFields = uploadInvoiceSchema.safeParse({
+    invoice: formData.get("invoice"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      error: true,
+      message: validatedFields.error.flatten().fieldErrors.invoice,
+    };
+  }
+
+  const { invoice } = validatedFields.data;
+
+  if (!(invoice instanceof File)) {
+    return {
+      error: true,
+      message: ["File invoice harus dipilih"],
+    };
+  }
+
+  // const buffer = await invoice.arrayBuffer();
+
+  // console.log("buffer", buffer);
+
+  // const test = Buffer.from(buffer, "utf8").toString("base64");
+
+  const token = cookies().get("accessToken")?.value;
+
+  const body = new FormData();
+
+  body.append("invoice", invoice);
+
+  console.log("body", body);
+
+  const response = await fetch(
+    `${process.env.API_URL}/submissions/${formData.get("id")}/upload-invoice`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ContentType: "multipart/form-data",
+      },
+      body: body,
+    }
+  );
+
+  const responseJson = await response.json();
+
+  console.log('responseJson', responseJson)
+  
+  if (!response.ok) {
+    return {
+      error: true,
+      message: ["Gagal upload invoice"],
+    };
+  }
+  3;
+  revalidatePath(`/dashboard/submission/monitor/${formData.get("id")}`, "page");
+  return {
+    error: false,
+    message: ["Berhasil upload invoice"],
   };
 }

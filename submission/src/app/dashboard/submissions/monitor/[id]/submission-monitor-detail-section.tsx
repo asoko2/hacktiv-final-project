@@ -72,8 +72,9 @@ export default function SubmissionMonitorDetailSection({
     <div>
       {((currentGroup === "atasan" &&
         submissionData.submission.status !== "2") ||
-        (currentGroup === "hrd" &&
-          submissionData.submission.status !== "3")) && (
+        (currentGroup === "hrd" && submissionData.submission.status !== "3") ||
+        (currentGroup === "pengesah" &&
+          submissionData.submission.status !== "5")) && (
         <CheckApproval submission={submissionData.submission} />
       )}
       <SubmissionDetailCard submission={submissionData.submission} monitor />

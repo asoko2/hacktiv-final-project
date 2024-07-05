@@ -290,8 +290,10 @@ class SubmissionController extends BaseController
             ]);
         }
 
+        $publicUrl = base_url('uploads/' . $filepath);
+
         $data = [
-            'invoice_dir' => $filepath,
+            'invoice_dir' => $publicUrl,
             'status' => 5,
         ];
 
@@ -470,18 +472,27 @@ class SubmissionController extends BaseController
     {
         $data = $this->request->getJSON();
         $submissionDetailViewModel = new \App\Models\SubmissionDetailViewModel();
-        $data = $submissionDetailViewModel
+        $submissions = $submissionDetailViewModel
             ->where('status', $data->status)
             ->orderBy('status', 'asc')
             ->orderBy('id', 'asc')
             ->findAll();
 
-        if ($data) {
+        // log_message('debug', 'Data: '. json_encode($submissions['name']));
+
+        // if ($submissions['status'] == 5) {
+        //     $publicUrl = base_url($submissions['invoice_dir']);
+
+        //     log_message('info', 'Public URL: ' . $publicUrl);
+
+        // }
+
+        if ($submissions) {
             return $this->response->setJSON([
                 'status' => 200,
                 'error' => null,
                 'message' => 'Data found',
-                'data' => $data
+                'data' => $submissions
             ]);
         } else {
             return $this->response->setJSON([
